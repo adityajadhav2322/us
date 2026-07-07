@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no">
+    <title>Memories for Fatemeh 📸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fcf0f2; 
+            background-image: radial-gradient(#ffccd5 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden; 
+            height: 100vh;
+            width: 100vw;
+            touch-action: none; 
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff4d6d;
+            font-size: 1.8rem;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(255, 77, 109, 0.2);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .polaroids-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 80px);
+            perspective: 1000px; 
+        }
+
+        .polaroid-wrapper {
+            position: absolute;
+            width: 260px;
+            height: 320px;
+            cursor: grab;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .polaroid-wrapper:active {
+            cursor: grabbing;
+        }
+
+        .polaroid-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-radius: 4px;
+        }
+
+        .polaroid-wrapper.is-flipped .polaroid-inner {
+            transform: rotateY(180deg);
+        }
+
+        .polaroid-front, .polaroid-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background-color: white;
+            padding: 15px 15px 20px 15px;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+
+        .polaroid-front {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .polaroid-image {
+            width: 100%;
+            height: 240px;
+            background-color: #ffe1e8;
+            object-fit: cover;
+            border: 1px solid #eee;
+            pointer-events: none;
+        }
+
+        .polaroid-caption {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-top: auto;
+            color: #333;
+            pointer-events: none;
+        }
+
+        .polaroid-back {
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: #fff9fa;
+            border: 2px dashed #ffb3c6;
+        }
+
+        .secret-message {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: #c9184a;
+            line-height: 1.3;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Drag the photos & tap to flip! ✨</h1>
+
+    <div class="polaroids-container">
+
+        <div class="polaroid-wrapper" data-rotation="-15">
+            <div class="polaroid-inner">
+                <div class="polaroid-front">
+                    <img class="polaroid-image" src="https://i.imgur.com/YOUR_IMGUR_LINK_HERE.jpg" alt="Us">
+                    <div class="polaroid-caption">Our first date ❤️</div>
+                </div>
+                <div class="polaroid-back">
+                    <div class="secret-message">I was so nervous, but the moment I saw you, I knew you were special.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="polaroid-wrapper" data-rotation="8">
+            <div class="polaroid-inner">
+                <div class="polaroid-front">
+                    <img class="polaroid-image" src="https://i.imgur.com/YOUR_IMGUR_LINK_HERE.jpg" alt="Us">
+                    <div class="polaroid-caption">My favorite smile</div>
+                </div>
+                <div class="polaroid-back">
+                    <div class="secret-message">Your smile literally makes my entire day better. Never stop smiling! 🥰</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="polaroid-wrapper" data-rotation="-4">
+            <div class="polaroid-inner">
+                <div class="polaroid-front">
+                    <img class="polaroid-image" src="https://i.imgur.com/YOUR_IMGUR_LINK_HERE.jpg" alt="Us">
+                    <div class="polaroid-caption">Just you & me</div>
+                </div>
+                <div class="polaroid-back">
+                    <div class="secret-message">I love you, Fatemeh. More than anything. 💖</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="polaroid-wrapper" data-rotation="20">
+            <div class="polaroid-inner">
+                <div class="polaroid-front">
+                    <img class="polaroid-image" src="https://i.imgur.com/YOUR_IMGUR_LINK_HERE.jpg" alt="Us">
+                    <div class="polaroid-caption">Best day ever</div>
+                </div>
+                <div class="polaroid-back">
+                    <div class="secret-message">I can't wait to make a million more memories exactly like this one. ✨</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const polaroids = document.querySelectorAll('.polaroid-wrapper');
+        let highestZIndex = 10; 
+
+        polaroids.forEach(polaroid => {
+            const baseRotation = parseFloat(polaroid.getAttribute('data-rotation'));
+            const randomX = (Math.random() - 0.5) * 60; 
+            const randomY = (Math.random() - 0.5) * 60;
+            
+            polaroid.style.transform = `translate(calc(-50% + ${randomX}px), calc(-50% + ${randomY}px)) rotate(${baseRotation}deg)`;
+            
+            let isDragging = false;
+            let startX, startY;
+            let hasMoved = false; 
+
+            polaroid.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                hasMoved = false;
+                
+                highestZIndex++;
+                polaroid.style.zIndex = highestZIndex;
+
+                startX = e.clientX;
+                startY = e.clientY;
+
+                const style = window.getComputedStyle(polaroid);
+                const matrix = new DOMMatrixReadOnly(style.transform);
+                
+                polaroid.dataset.initialX = matrix.m41;
+                polaroid.dataset.initialY = matrix.m42;
+                polaroid.dataset.rotation = baseRotation;
+
+                polaroid.setPointerCapture(e.pointerId);
+            });
+
+            polaroid.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                    hasMoved = true;
+                }
+
+                const newX = parseFloat(polaroid.dataset.initialX) + dx;
+                const newY = parseFloat(polaroid.dataset.initialY) + dy;
+                const rot = polaroid.dataset.rotation;
+
+                polaroid.style.transform = `matrix(1, 0, 0, 1, ${newX}, ${newY}) rotate(${rot}deg)`;
+            });
+
+            polaroid.addEventListener('pointerup', (e) => {
+                isDragging = false;
+                polaroid.releasePointerCapture(e.pointerId);
+
+                if (!hasMoved) {
+                    polaroid.classList.toggle('is-flipped');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
